@@ -37,7 +37,7 @@ Salve o arquivo CSV (palmerpenguins.csv) na mesma pasta do código Python.
 Execute o código Python:
 
 ``
-python nome_do_seu_arquivo.py
+python AG2.py
 ``
 
 
