@@ -70,6 +70,8 @@ O código irá prever e exibir a espécie do pinguim.
 - Comprimento da nadadeira: 200.0 mm
 - Massa corporal: 4000.0 g
 
+#### O código usará o modelo de Árvore de Decisão treinado para prever a espécie correspondente a esses dados. O resultado será algo como "A espécie prevista é: Adelie" (usando a tradução da espécie prevista do número para o nome da espécie, conforme definido nos mapeamentos).
+
 
 ### Observações
 O modelo de Árvore de Decisão foi usado para fazer as predições. 
