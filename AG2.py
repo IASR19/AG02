@@ -29,13 +29,22 @@ df['species'] = df['species'].astype('int64')
 column_order = ['island', 'sex', 'culmen_length_mm', 'culmen_depth_mm', 'flipper_length_mm', 'body_mass_g', 'species']
 df = df[column_order]
 
+# Solicitando dados de entrada ao usuário
+island_input = input("Digite o número da ilha (0 para Biscoe, 1 para Dream, 2 para Torgersen): ")
+sex_input = input("Digite o número do sexo (0 para Fêmea, 1 para Macho): ")
+culmen_length_mm = float(input("Digite o comprimento do bico (mm): "))
+culmen_depth_mm = float(input("Digite a profundidade do bico (mm): "))
+flipper_length_mm = float(input("Digite o comprimento da nadeira (mm): "))
+body_mass_g = float(input("Digite a massa corporal (g): "))
+
 # Visualizando os dados com gráficos de dispersão 📈
-colors = {'Adelie': 'blue', 'Chinstrap': 'orange', 'Gentoo': 'green'}
+colors = {0: 'blue', 1: 'orange', 2: 'green'}  # Corrigido para usar os valores numéricos de species_map
 
 # Gráfico 1: Comprimento do bico vs. Profundidade do bico
 plt.figure(figsize=(10, 6))
 for species, group in df.groupby('species'):
-    plt.scatter(group['culmen_length_mm'], group['culmen_depth_mm'], c=colors[species_map[species]], label=species_map[species])
+    plt.scatter(group['culmen_length_mm'], group['culmen_depth_mm'], c=colors[species], label=species)
+plt.scatter(culmen_length_mm, culmen_depth_mm, c='red', marker='x', label='Pinguim a ser previsto')
 plt.xlabel('Comprimento do Bico (mm)')
 plt.ylabel('Profundidade do Bico (mm)')
 plt.title('Comprimento vs. Profundidade do Bico por Espécie')
@@ -45,7 +54,8 @@ plt.show()
 # Gráfico 2: Comprimento do bico vs. Comprimento da nadadeira
 plt.figure(figsize=(10, 6))
 for species, group in df.groupby('species'):
-    plt.scatter(group['culmen_length_mm'], group['flipper_length_mm'], c=colors[species_map[species]], label=species_map[species])
+    plt.scatter(group['culmen_length_mm'], group['flipper_length_mm'], c=colors[species], label=species)
+plt.scatter(culmen_length_mm, flipper_length_mm, c='red', marker='x', label='Pinguim a ser previsto')
 plt.xlabel('Comprimento do Bico (mm)')
 plt.ylabel('Comprimento da Nadeira (mm)')
 plt.title('Comprimento do Bico vs. Comprimento da Nadeira por Espécie')
@@ -55,7 +65,8 @@ plt.show()
 # Gráfico 3: Comprimento do bico vs. Massa corporal
 plt.figure(figsize=(10, 6))
 for species, group in df.groupby('species'):
-    plt.scatter(group['culmen_length_mm'], group['body_mass_g'], c=colors[species_map[species]], label=species_map[species])
+    plt.scatter(group['culmen_length_mm'], group['body_mass_g'], c=colors[species], label=species)
+plt.scatter(culmen_length_mm, body_mass_g, c='red', marker='x', label='Pinguim a ser previsto')
 plt.xlabel('Comprimento do Bico (mm)')
 plt.ylabel('Massa Corporal (g)')
 plt.title('Comprimento do Bico vs. Massa Corporal por Espécie')
@@ -81,43 +92,10 @@ clf_knn.fit(X_train, y_train)
 clf_mlp.fit(X_train, y_train)
 clf_nb.fit(X_train, y_train)
 
-# Fazendo as predições 🔮
-y_pred_dt = clf_dt.predict(X_test)
-y_pred_knn = clf_knn.predict(X_test)
-y_pred_mlp = clf_mlp.predict(X_test)
-y_pred_nb = clf_nb.predict(X_test)
-
-# Avaliando os modelos e vendo qual mandou melhor 🏆
-print("Árvore de Decisão:")
-print(f'Acurácia: {accuracy_score(y_test, y_pred_dt):.2f}')
-print("Relatório de Classificação:\n", classification_report(y_test, y_pred_dt))
-
-print("\nk Vizinhos Mais Próximos:")
-print(f'Acurácia: {accuracy_score(y_test, y_pred_knn):.2f}')
-print("Relatório de Classificação:\n", classification_report(y_test, y_pred_knn))
-
-print("\nPerceptron Multicamadas:")
-print(f'Acurácia: {accuracy_score(y_test, y_pred_mlp):.2f}')
-print("Relatório de Classificação:\n", classification_report(y_test, y_pred_mlp))
-
-print("\nNaive Bayes:")
-print(f'Acurácia: {accuracy_score(y_test, y_pred_nb):.2f}')
-print("Relatório de Classificação:\n", classification_report(y_test, y_pred_nb))
-
 # Função pra prever a espécie do pinguim 🐧
 def predict_penguin_with_input(island, sex, culmen_length_mm, culmen_depth_mm, flipper_length_mm, body_mass_g):
-    # Criando um DataFrame com os dados de entrada 📝
-    new_data = pd.DataFrame({
-        'island': [island],
-        'sex': [sex],
-        'culmen_length_mm': [culmen_length_mm],
-        'culmen_depth_mm': [culmen_depth_mm],
-        'flipper_length_mm': [flipper_length_mm],
-        'body_mass_g': [body_mass_g]
-    })
-
     # Fazendo a previsão 🔮
-    prediction = clf_dt.predict(new_data)[0]
+    prediction = clf_dt.predict([[island, sex, culmen_length_mm, culmen_depth_mm, flipper_length_mm, body_mass_g]])[0]
 
     # Traduzindo o número da previsão para o nome da espécie 🧐
     inverse_species_map = {v: k for k, v in species_map.items()}
@@ -126,5 +104,5 @@ def predict_penguin_with_input(island, sex, culmen_length_mm, culmen_depth_mm, f
     # Mostrando o resultado 🚀
     print(f"A espécie prevista é: {predicted_species}")
 
-# Exemplo de uso da função com dados de um pinguim 🐧
-predict_penguin_with_input(2, 1, 45.0, 19.0, 200.0, 4000.0)
+# Chamando a função para prever a espécie
+predict_penguin_with_input(int(island_input), int(sex_input), culmen_length_mm, culmen_depth_mm, flipper_length_mm, body_mass_g)
