@@ -61,6 +61,15 @@ Siga as instruções e insira os valores para:
 
 O código irá prever e exibir a espécie do pinguim.
 
+#### Por exemplo, se você fornecer dados como:
+
+- Ilha: Torgersen (código 2)
+- Sexo: Macho (código 1)
+- Comprimento do bico: 45.0 mm
+- Profundidade do bico: 19.0 mm
+- Comprimento da nadadeira: 200.0 mm
+- Massa corporal: 4000.0 g
+
 
 ### Observações
 O modelo de Árvore de Decisão foi usado para fazer as predições. 
